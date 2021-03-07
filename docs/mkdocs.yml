@@ -1,12 +1,12 @@
 site_name: 'Docker Mailserver'
 site_description: 'A fullstack but simple mail server (SMTP, IMAP, LDAP, Antispam, Antivirus, etc.) using Docker.'
 site_author: 'docker-mailserver (Github Organization)'
-repo_name: 'docker-mailserver'
-repo_url: 'https://github.com/docker-mailserver/docker-mailserver'
+repo_name: 'mkdocs-version-test'
+repo_url: 'https://github.com/polarathene/mkdocs-version-test'
 copyright: '<p>&copy <a href="https://github.com/docker-mailserver"><em>Docker Mailserver Organization</em></a><br/><span>This project is licensed under the MIT license.</span></p>'
 edit_uri: 'edit/master/docs/content'
 docs_dir: 'content/'
-site_url: 'https://docker-mailserver.github.io/docker-mailserver'
+site_url: 'https://polarathene.github.io/mkdocs-version-test'
 theme:
   name: 'material'
   favicon: assets/logo/favicon-32x32.png
