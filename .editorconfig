@@ -1,0 +1,38 @@
+# –––––––––––––––––––––––––––––––––––––––––––––––
+# ––– General –––––––––––––––––––––––––––––––––––
+# ––– https://editorconfig.org ––––––––––––––––––
+# –––––––––––––––––––––––––––––––––––––––––––––––
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# –––––––––––––––––––––––––––––––––––––––––––––––
+# ––– Specific ––––––––––––––––––––––––––––––––––
+# –––––––––––––––––––––––––––––––––––––––––––––––
+
+[*.{yaml,yml,sh,bats,css}]
+indent_size = 2
+
+[Makefile]
+indent_style = tab
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
+# For code fences, 2 is better than 4
+indent_size = 2
+
+# –––––––––––––––––––––––––––––––––––––––––––––––
+# ––– Git Submodules ––––––––––––––––––––––––––––
+# –––––––––––––––––––––––––––––––––––––––––––––––
+
+[{test/bats/**,test/test_helper/**,target/docker-configomat/**}]
+indent_style = none
+indent_size = none
+end_of_line = none
