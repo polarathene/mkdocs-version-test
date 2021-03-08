@@ -8,6 +8,12 @@ on:
     paths:
       - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
+  # For archiving `edge` docs to a snapshot versioned subdirectory matching `v<MAJOR>.<MINOR>` of a git tag
+  create:
+    branches:
+      - master
+    tags:
+      - 'v*'
 
 # Jobs will run shell commands from this subdirectory:
 defaults:
@@ -26,7 +32,7 @@ jobs:
       - name: 'Build with mkdocs-material via Docker'
         run: docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict
 
-      - name: 'Check if should deploy for `<major>.<minor>` tag version'
+      - name: 'Check if should deploy for `<major>.<minor>` tag version instead'
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           DOCS_VERSION=$(egrep -o 'v[0-9]+\.[0-9]+' <<< "${GITHUB_REF}")
