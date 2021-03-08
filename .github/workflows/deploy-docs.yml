@@ -18,16 +18,25 @@ jobs:
   deploy:
     name: 'Deploy Docs'
     runs-on: ubuntu-20.04
+    env:
+      DOCS_VERSION: edge
     steps:
       - uses: actions/checkout@v2
 
       - name: 'Build with mkdocs-material via Docker'
         run: docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict
 
+      - name: 'Check if should deploy for `<major>.<minor>` tag version'
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          DOCS_VERSION=$(egrep -o 'v[0-9]+\.[0-9]+' <<< "${GITHUB_REF}")
+          echo "DOCS_VERSION=${DOCS_VERSION}" >> $GITHUB_ENV
+
       - name: 'Deploy to Github Pages'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/site
+          destination_dir: ./${{ env.DOCS_VERSION }}
           user_name: 'github-actions[bot]'
           user_email: '41898282+github-actions[bot]@users.noreply.github.com'

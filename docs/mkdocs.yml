@@ -18,6 +18,15 @@ theme:
     - navigation.expand
     - navigation.instant
 
+# We do not use `mike`, but enabling this will enable the version selector that references `versions.json` on `gh-pages` branch.
+# versions.json values (drop-down order matches order of elements, no sorting is done):
+# `version` URL subdirectory for versioned docs
+# `title`: Presentational name, only appears in dropdown (may be fixed: https://github.com/squidfunk/mkdocs-material/pull/2401)
+# `aliases` alternative versions in URL that will map to the same `title`/`version`, we don't use this.
+extra:
+  version:
+    provider: mike
+
 extra_css:
   - assets/css/customizations.css
 # plugins:

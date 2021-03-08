@@ -1,0 +1,35 @@
+name: 'Documentation'
+
+on:
+  create:
+    branches:
+      - master
+    tags:
+      - 'v*'
+
+jobs:
+  add-version-to-docs:
+    name: 'Update `gh-pages` branch `versions.json`'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 'Checkout the default branch (master)'
+        uses: actions/checkout@v2
+
+      #- name: 'Get `<major>.<minor>` tag version (truncates patch version)'
+      - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
+        run: './.github/workflows/scripts/docs/update-versions-json.sh'
+      - name: 'Checkout the docs branch to a subdirectory'
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      # If an actual change was made, commit and push it, otherwise job will have exited.
+      - name: 'Push update for `versions.json`'
+        run: |
+          mv versions.json gh-pages/versions.json
+          cd gh-pages
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add versions.json
+          git commit -m "Make ${DOCS_VERSION} available to `mike` version selector"
