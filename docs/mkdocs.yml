@@ -1,12 +1,27 @@
+# Site specific
 site_name: 'Docker Mailserver'
 site_description: 'A fullstack but simple mail server (SMTP, IMAP, LDAP, Antispam, Antivirus, etc.) using Docker.'
 site_author: 'docker-mailserver (Github Organization)'
+copyright: '<p>&copy <a href="https://github.com/docker-mailserver"><em>Docker Mailserver Organization</em></a><br/><span>This project is licensed under the MIT license.</span></p>'
+
+# Project source specific
 repo_name: 'mkdocs-version-test'
 repo_url: 'https://github.com/polarathene/mkdocs-version-test'
-copyright: '<p>&copy <a href="https://github.com/docker-mailserver"><em>Docker Mailserver Organization</em></a><br/><span>This project is licensed under the MIT license.</span></p>'
+
+# All docs `edit` button will go to this subpath of the `repo_url`.
+# For versioned docs, this may be a little misleading for a user not viewing the `edge` docs which match `master` branch.
 edit_uri: 'edit/master/docs/content'
+
+# The main docs content lives here, any files will be copied over to the deployed version,
+# unless the file or directory name is prefixed with `.`
 docs_dir: 'content/'
-site_url: 'https://polarathene.github.io/mkdocs-version-test'
+
+# Canonical URL (HTML content instructs search engines that this is where the preferred version of the docs is located, useful when we have duplicate content like versioned docs)
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Choosing_between_www_and_non-www_URLs#using_%3Clink_relcanonical%3E
+# Also required for `sitemap.xml` generation at build, which bots use to assist them crawling and indexing a website, and the `mkdocs-material` Instant Navigation feature utilizes for similar purpose
+site_url: 'https://polarathene.github.io/mkdocs-version-test/edge'
+
+# Anything related to the `mkdocs-material` theme config goes here.
 theme:
   name: 'material'
   favicon: assets/logo/favicon-32x32.png
@@ -18,23 +33,18 @@ theme:
     - navigation.expand
     - navigation.instant
 
-# We do not use `mike`, but enabling this will enable the version selector that references `versions.json` on `gh-pages` branch.
-# versions.json values (drop-down order matches order of elements, no sorting is done):
-# `version` URL subdirectory for versioned docs
-# `title`: Presentational name, only appears in dropdown (may be fixed: https://github.com/squidfunk/mkdocs-material/pull/2401)
-# `aliases` alternative versions in URL that will map to the same `title`/`version`, we don't use this.
+# We make some minor style adjustments or resolve issues that upstream `mkdocs-material` would not accept a PR for:
+extra_css:
+  - assets/css/customizations.css
+
+# We do not use `mike`, but enabling this will enable the version selector UI.
+# It references `versions.json` on `gh-pages` branch,
+# however we have a basic setup that only matches `version` to a subdirectory.
 extra:
   version:
     provider: mike
 
-extra_css:
-  - assets/css/customizations.css
-# plugins:
-#   - search
-#   - redirects:
-#       redirect_maps:
-#         tutorials/faq: config/troubleshooting/faq.md
-
+# Various extensions for `mkdocs` are enabled and configured here to extend supported markdown syntax/features.
 markdown_extensions:
   - toc:
       permalink: ⚓︎
@@ -42,6 +52,11 @@ markdown_extensions:
   - attr_list
   - admonition
   - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.magiclink
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
   - pymdownx.highlight:
       extend_pygments_lang:
         - name: yml
@@ -60,13 +75,12 @@ markdown_extensions:
           lang: txt
         - name: caddyfile
           lang: txt
-  - pymdownx.superfences
-  - pymdownx.magiclink
-  - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
 
-# If referencing a file more than once, the URLs will all point to the nav hierarchy of the final file.
+# Hard-coded navigation list. Key(UI label): Value(relative filepath from `docs_dir`).
+# - If referencing a file more than once, the URLs will all point to the nav hierarchy of the last file reference entry. That usually breaks UX, try avoid it.
+# - The top-level elements are presented as tabs (due to `theme.features.navigation.tabs`).
+#   - Nested elements appear in the sidebar (left) of each tabs page.
+#   - 3rd level and beyond are automatically expanded in the sidebar instead of collapsed (due to `theme.features.navigation.expand`)
 nav:
   - 'Home': index.md
   - 'Introduction': introduction.md
