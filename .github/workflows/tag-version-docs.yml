@@ -15,20 +15,21 @@ jobs:
       - name: 'Checkout the default branch (master)'
         uses: actions/checkout@v2
 
-      #- name: 'Get `<major>.<minor>` tag version (truncates patch version)'
-      - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
-        run: './.github/workflows/scripts/docs/update-versions-json.sh'
       - name: 'Checkout the docs branch to a subdirectory'
         uses: actions/checkout@v2
         with:
           ref: gh-pages
           path: gh-pages
 
+      # Sets `DOCS_VERSION` env var, if invalid exits job early
+      - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
+        working-directory: gh-pages
+        run: '../.github/workflows/scripts/docs/update-versions-json.sh'
+
       # If an actual change was made, commit and push it, otherwise job will have exited.
       - name: 'Push update for `versions.json`'
+        working-directory: gh-pages
         run: |
-          mv versions.json gh-pages/versions.json
-          cd gh-pages
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add versions.json
