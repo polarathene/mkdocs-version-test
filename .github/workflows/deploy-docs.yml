@@ -8,6 +8,8 @@ on:
     paths:
       - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
+    tags:
+      - 'v*'
   # For taking a snapshot of the docs state from the tagged commit,
   # to a versioned subdirectory with name matching the git tag substring `v<MAJOR>.<MINOR>`:
   #create:

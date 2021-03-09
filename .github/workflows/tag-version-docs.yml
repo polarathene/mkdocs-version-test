@@ -1,10 +1,7 @@
 name: 'Documentation (versions.json)'
 
-# The creation of a branch will trigger this
 on:
-  create:
-    branches:
-      - master
+  push:
     tags:
       - 'v*'
 
