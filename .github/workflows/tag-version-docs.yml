@@ -23,16 +23,18 @@ jobs:
       # Sets `DOCS_VERSION` env var, if invalid exits job early
       - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
         working-directory: gh-pages
-        run: '../.github/workflows/scripts/docs/update-versions-json.sh'
+        run: |
+          ../.github/workflows/scripts/docs/update-versions-json.sh
+          DOCS_VERSION=$(egrep -o 'v[0-9]+\.[0-9]+' <<< "${GITHUB_REF}")
+          echo "DOCS_VERSION=${DOCS_VERSION}" >> $GITHUB_ENV
+
 
       # If an actual change was made, commit and push it, otherwise job will have exited.
       - name: 'Push update for `versions.json`'
         working-directory: gh-pages
-        env:
-          TEST: "${DOCS_VERSION}"
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add versions.json
-          git commit -m "Make ${{ env.DOCS_VERSION }} available $TEST to the 'mike' version selector"
+          git commit -m "Make ${{ env.DOCS_VERSION }} available $GITHUB_ENV to the 'mike' version selector"
           git push
