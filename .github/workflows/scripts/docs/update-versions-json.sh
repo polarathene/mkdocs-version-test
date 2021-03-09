@@ -8,7 +8,7 @@ function _update-versions-json {
   local MAJOR_MINOR=$(egrep -o 'v[0-9]+\.[0-9]+' <<< "${GITHUB_REF}")
   # Github Actions CI method for exporting ENV vars to share across a jobs steps
   # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
-  echo "DOCS_VERSION=${DOCS_VERSION}" >> $GITHUB_ENV
+  echo "DOCS_VERSION=${MAJOR_MINOR}" >> $GITHUB_ENV
 
   if [[ -z "${MAJOR_MINOR}" ]]
   then
