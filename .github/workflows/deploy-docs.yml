@@ -10,11 +10,11 @@ on:
       - 'docs/**'
   # For taking a snapshot of the docs state from the tagged commit,
   # to a versioned subdirectory with name matching the git tag substring `v<MAJOR>.<MINOR>`:
-  create:
-    branches:
-      - master
-    tags:
-      - 'v*'
+  #create:
+    #branches:
+      #- master
+    #tags:
+      #- 'v*'
 
 # Jobs `run` steps will perform shell commands from this subdirectory:
 defaults:
