@@ -8,30 +8,58 @@ on:
     paths:
       - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
-    # NOTE: The tag push event isn't constrained by branch and path conditions.
+    # NOTE: The tag push event is not constrained by branch and path `on` conditions.
     # For taking a snapshot of the docs state from the tagged commit,
-    # to a versioned subdirectory with name matching the git tag substring `v<MAJOR>.<MINOR>`:
+    # to a versioned subdirectory with dir name matching the git tag substring `v<MAJOR>.<MINOR>`:
     tags:
       - 'v*'
 
-# Jobs `run` steps will perform shell commands from this subdirectory:
-defaults:
-  run:
-    working-directory: docs
+env:
+  # Default docs version to build and deploy
+  DOCS_VERSION: edge
+  GIT_USER: 'github-actions[bot]'
+  GIT_EMAIL: '41898282+github-actions[bot]@users.noreply.github.com'
 
 jobs:
+  add-version-to-docs:
+    if: startsWith(github.ref, 'refs/tags/')
+    name: 'Handle `versions.json` in `gh-pages` branch'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: 'Checkout the default branch (master)'
+        uses: actions/checkout@v2
+
+      - name: 'Checkout the docs branch to a subdirectory'
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      # Updates `env.DOCS_VERSION` to the tag version; if invalid exits job early.
+      - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
+        working-directory: gh-pages
+        run: '../.github/workflows/scripts/docs/update-versions-json.sh'
+
+      # If an actual change was made to `versions.json`, commit and push it - otherwise the job would have exited.
+      - name: 'Push update for `versions.json`'
+        working-directory: gh-pages
+        run: |
+          git config user.name ${{ env.GIT_USER }}
+          git config user.email ${{ env.GIT_EMAIL }}
+          git add versions.json
+          git commit -m "Make ${{ env.DOCS_VERSION }} available to the 'mike' version selector"
+          git push
   deploy:
     name: 'Deploy Docs'
     runs-on: ubuntu-20.04
-    env:
-      DOCS_VERSION: edge
     steps:
       - uses: actions/checkout@v2
 
       - name: 'Build with mkdocs-material via Docker'
+        working-directory: docs
         run: docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict
 
-      - name: 'Check if should deploy for `<major>.<minor>` tag version instead'
+      - name: 'Check if deploy is for a `v<major>.<minor>` tag version instead of `edge`'
         if: startsWith(github.ref, 'refs/tags/')
         run: |
           DOCS_VERSION=$(egrep -o 'v[0-9]+\.[0-9]+' <<< "${GITHUB_REF}")
@@ -41,9 +69,9 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Build directory contents  to publish to `gh-pages` branch:
+          # Build directory contents to publish to `gh-pages` branch:
           publish_dir: ./docs/site
           # Directory to place `publish_dir` contents on the `gh-pages` branch:
           destination_dir: ${{ env.DOCS_VERSION }}
-          user_name: 'github-actions[bot]'
-          user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+          user_name: ${{ env.GIT_USER }}
+          user_email: ${{ env.GIT_EMAIL }}
