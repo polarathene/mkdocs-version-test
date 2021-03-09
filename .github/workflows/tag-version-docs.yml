@@ -2,6 +2,7 @@ name: 'Documentation (versions.json)'
 
 on:
   push:
+    # NOTE: The tag push event cannot be constrained by `branches` and `paths` `on.push` conditions.
     tags:
       - 'v*'
 
@@ -28,10 +29,10 @@ jobs:
       - name: 'Push update for `versions.json`'
         working-directory: gh-pages
         env:
-          TEST: 'test'
+          TEST: ${{env.DOCS_VERSION}}
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add versions.json
-          git commit -m "Make $DOCS_VERSION available $TEST to the 'mike' version selector"
+          git commit -m "Make ${{DOCS_VERSION}} available $TEST to the 'mike' version selector"
           git push

@@ -1,4 +1,4 @@
-name: 'Documentation'
+name: 'Documentation (Push Event)'
 
 on:
   workflow_dispatch:
@@ -8,15 +8,11 @@ on:
     paths:
       - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
+    # NOTE: The tag push event isn't constrained by branch and path conditions.
+    # For taking a snapshot of the docs state from the tagged commit,
+    # to a versioned subdirectory with name matching the git tag substring `v<MAJOR>.<MINOR>`:
     tags:
       - 'v*'
-  # For taking a snapshot of the docs state from the tagged commit,
-  # to a versioned subdirectory with name matching the git tag substring `v<MAJOR>.<MINOR>`:
-  #create:
-    #branches:
-      #- master
-    #tags:
-      #- 'v*'
 
 # Jobs `run` steps will perform shell commands from this subdirectory:
 defaults:
@@ -45,7 +41,9 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/site
-          destination_dir: ./${{ env.DOCS_VERSION }}
+          # Build directory contents  to publish to `gh-pages` branch:
+          publish_dir: ./docs/site
+          # Directory to place `publish_dir` contents on the `gh-pages` branch:
+          destination_dir: ${{ env.DOCS_VERSION }}
           user_name: 'github-actions[bot]'
           user_email: '41898282+github-actions[bot]@users.noreply.github.com'
