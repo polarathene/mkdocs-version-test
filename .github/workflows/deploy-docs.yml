@@ -83,7 +83,7 @@ jobs:
 
           # Replace '/<version>/' (defaults to 'edge') in 'canonical' link element of HTML files, with the tagged docs version:
           find . -type f -name "*.html" -exec \
-            sed -i "s|^\(.*<link rel=\"canonical\".*\)/edge/|\1/${DOCS_VERSION}/|" \
+            sed -i "s|^\(.*<link rel=\"canonical\".*\)${DOCS_VERSION}|\1edge|" \
             {} +
 
       - name: 'Deploy to Github Pages'
