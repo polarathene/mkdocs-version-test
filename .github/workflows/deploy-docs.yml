@@ -67,7 +67,11 @@ jobs:
 
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
-        run: "docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict"
+        run: |
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --volume "${PWD}:/docs" \
+            squidfunk/mkdocs-material build --strict
 
       - name: 'If tagged version, do some cleanup'
         if: startsWith(github.ref, 'refs/tags/')
