@@ -71,7 +71,7 @@ jobs:
           # If the tag was made on a different branch from master, it can be used for edit_uri:
           # Note: Users can only be directed to Github edit URI of a branch, not a specific tag/commit
           echo "hello?"
-          echo "$(git branch --show-current)"
+          echo "$(git --version)"
           sed -i "s|^\(edit_uri:.*\)master|\1$(git branch --show-current)|" mkdocs.yml
           echo "uhh?"
           cat mkdocs.yml
