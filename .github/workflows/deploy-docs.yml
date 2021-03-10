@@ -37,11 +37,14 @@ jobs:
 
       # Updates `env.DOCS_VERSION` to the tag version; if invalid exits job early.
       - name: 'Ensure `versions.json` has relevant `<major>.<minor>` tag version (truncates patch version)'
+        id: add-version
+        continue-on-error: true
         working-directory: gh-pages
         run: '../.github/workflows/scripts/docs/update-versions-json.sh'
 
       # If an actual change was made to `versions.json`, commit and push it - otherwise the job would have exited.
       - name: 'Push update for `versions.json`'
+        if: ${{ steps.add-version.outcome == 'success' }}
         working-directory: gh-pages
         run: |
           git config user.name ${{ env.GIT_USER }}
