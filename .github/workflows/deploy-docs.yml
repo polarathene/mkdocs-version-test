@@ -42,7 +42,7 @@ jobs:
         working-directory: gh-pages
         run: '../.github/workflows/scripts/docs/update-versions-json.sh'
 
-      # If an actual change was made to `versions.json`, commit and push it - otherwise the job would have exited.
+      # If an actual change was made to `versions.json`, commit and push it - otherwise the step is skipped instead of reporting job failure.
       - name: 'Push update for `versions.json`'
         if: ${{ steps.add-version.outcome == 'success' }}
         working-directory: gh-pages
@@ -68,17 +68,10 @@ jobs:
           # Build docs for the tagged version instead:
           sed -i "s|^\(site_url:.*\)edge|\1${DOCS_VERSION}|" mkdocs.yml
 
-          # If the tag was made on a different branch from master, it can be used for edit_uri:
-          # Note: Users can only be directed to Github edit URI of a branch, not a specific tag/commit
-          echo "hello?"
-          echo "$(git branch --show-current)"
-          sed -i "s|^\(edit_uri:.*\)master|\1$(git branch --show-current)|" mkdocs.yml
-          echo "uhh?"
-          cat mkdocs.yml
-
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
         run: |
+          # --user is to avoid ownership issues on build output during the next tagged version step
           docker run --rm \
             --user "$(id -u):$(id -g)" \
             --volume "${PWD}:/docs" \
