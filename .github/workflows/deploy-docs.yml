@@ -68,6 +68,10 @@ jobs:
           # Build docs for the tagged version instead:
           sed -i "s|^\(site_url:.*\)edge|\1${DOCS_VERSION}|" mkdocs.yml
 
+          # If the tag was made on a different branch from master, it can be used for edit_uri:
+          # Note: Users can only be directed to Github edit URI of a branch, not a specific tag/commit
+          sed -i "s|^\(edit_uri:.*\)master|\1$(git branch --show-current)|" mkdocs.yml
+
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
         run: |
