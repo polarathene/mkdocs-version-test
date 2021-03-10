@@ -74,6 +74,7 @@ jobs:
           # Note: Users can only be directed to Github edit URI of a branch, not a specific tag/commit
           echo "hello?"
           git branch --show-current
+          git rev-parse --abbrev-ref HEAD
           echo "$(git --version)"
           echo "xx$(git branch --show-current)"
           sed -i "s|^\(edit_uri:.*\)master|\1$(git branch --show-current)|" mkdocs.yml
