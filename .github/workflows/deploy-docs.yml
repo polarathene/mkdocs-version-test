@@ -1,18 +1,9 @@
 name: 'Documentation (Push Event)'
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - master
     paths:
-      - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
-    # NOTE: The tag push event is not constrained by branch and path `on` conditions.
-    # For taking a snapshot of the docs state from the tagged commit,
-    # to a versioned subdirectory with dir name matching the git tag substring `v<MAJOR>.<MINOR>`:
-    tags:
-      - 'v[0-9]+.[0-9]+*'
 
 env:
   # Default docs version to build and deploy
