@@ -6,7 +6,6 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/deploy-docs.yml'
       - 'docs/**'
     # NOTE: The tag push event is not constrained by branch and path `on` conditions.
     # For taking a snapshot of the docs state from the tagged commit,
