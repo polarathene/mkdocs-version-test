@@ -1,4 +1,4 @@
-name: 'Documentation (Push Event)'
+name: 'Docs (Push)'
 
 on:
   workflow_dispatch:
