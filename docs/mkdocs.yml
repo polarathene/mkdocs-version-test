@@ -1,27 +1,27 @@
-# Site specific
+# Site specific:
 site_name: 'Docker Mailserver'
 site_description: 'A fullstack but simple mail server (SMTP, IMAP, LDAP, Antispam, Antivirus, etc.) using Docker.'
 site_author: 'docker-mailserver (Github Organization)'
 copyright: '<p>&copy <a href="https://github.com/docker-mailserver"><em>Docker Mailserver Organization</em></a><br/><span>This project is licensed under the MIT license.</span></p>'
 
-# Project source specific
+# Project source specific:
 repo_name: 'mkdocs-version-test'
 repo_url: 'https://github.com/polarathene/mkdocs-version-test'
 
-# All docs `edit` button will go to this subpath of the `repo_url`.
-# For versioned docs, this may be a little misleading for a user not viewing the `edge` docs which match `master` branch.
+# All docs `edit` button will go to this subpath of the `repo_url`:
+# For versioned docs, this may be a little misleading for a user not viewing the `edge` docs which match the `master` branch.
 edit_uri: 'edit/master/docs/content'
 
 # The main docs content lives here, any files will be copied over to the deployed version,
-# unless the file or directory name is prefixed with `.`
+# unless the file or directory name is prefixed with a `.`
 docs_dir: 'content/'
 
 # Canonical URL (HTML content instructs search engines that this is where the preferred version of the docs is located, useful when we have duplicate content like versioned docs)
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Choosing_between_www_and_non-www_URLs#using_%3Clink_relcanonical%3E
-# Also required for `sitemap.xml` generation at build, which bots use to assist them crawling and indexing a website, and the `mkdocs-material` Instant Navigation feature utilizes for similar purpose
+# Also required for `sitemap.xml` generation at build time; which bots use to assist them crawling and indexing a website,
 site_url: 'https://polarathene.github.io/mkdocs-version-test/edge'
 
-# Anything related to the `mkdocs-material` theme config goes here.
+# Anything related to the `mkdocs-material` theme config goes here:
 theme:
   name: 'material'
   favicon: assets/logo/favicon-32x32.png
@@ -47,7 +47,7 @@ extra:
 # Various extensions for `mkdocs` are enabled and configured here to extend supported markdown syntax/features.
 markdown_extensions:
   - toc:
-      permalink: ⚓︎
+      anchorlink: true
   - abbr
   - attr_list
   - admonition
@@ -123,7 +123,7 @@ nav:
       - 'Mailserver behind Proxy': examples/tutorials/mailserver-behind-proxy.md
     - 'Use Cases':
       - 'Forward-Only Mailserver with LDAP': examples/uses-cases/forward-only-mailserver-with-ldap-authentication.md
-  - 'FAQ' : faq/faq.md
+  - 'FAQ' : faq.md
   - 'Contributing':
     - 'Issues and Pull Requests': contributing/issues-and-pull-requests.md
     - 'Coding Style': contributing/coding-style.md

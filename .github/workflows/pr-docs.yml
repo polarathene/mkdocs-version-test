@@ -1,9 +1,9 @@
-name: 'Documentation (PR)'
+name: 'Documentation'
 
 on:
-  workflow_dispatch:
   pull_request:
     paths:
+      - '.github/workflows/pr-docs.yml'
       - 'docs/**'
 
 # Jobs will run shell commands from this subdirectory:
