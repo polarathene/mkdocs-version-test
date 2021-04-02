@@ -16,7 +16,7 @@ jobs:
         working-directory: docs
         run: docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict
 
-      - name: Preview Deploy (Netlify)
+      - name: Deploy Preview (Netlify)
         id: preview
         uses: nwtgck/actions-netlify@v1.1
         timeout-minutes: 1
@@ -25,15 +25,16 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          alias: preview-for-pr-${{ github.event.pull_request.number }}
+          alias: deploy-preview-${{ github.event.pull_request.number }}
+          deploy-message: PR#${{ github.event.pull_request.number }}@${{ github.event.pull_request.head.sha }} | ${{ github.event.pull_request.title }}
           publish-dir: ./docs/site
           # We supply our own PR comment after this step.
           enable-pull-request-comment: false
           # Disable adding deploy comment on merge commit.
           enable-commit-comment: false
           # Disable adding a "Netlify - Netlify deployment" check status.
-          enable-commit-status: false
-          # deploy-message: Preview Deploy - ${{ github.event.pull_request.title }}
+          # May be useful, can click the status symbol for past commits to view old previews?
+          # enable-commit-status: false
           # production-deploy: false
           # netlify-config-path: ./docs/netlify.toml
 
@@ -43,5 +44,5 @@ jobs:
           message: |
             [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
 
-            Built with commit ${{ github.sha }} or is it ${{ github.event.pull_request.head.sha }}
+            Built with commit ${{ github.event.pull_request.head.sha }}
 
