@@ -8,6 +8,8 @@ Please first have a look at the [`README.md`][github-file-readme] to setup and c
 
 This documentation provides you with advanced configuration, detailed examples, and hints.
 
+Preview deploy test.
+
 ## Getting Started
 
 1. The script [`setup.sh`][github-file-setupsh] is supplied with this project. It supports you in **configuring and administrating** your server. Information on how to get it and how to use it is available [on a dedicated page][docs-setupsh].
