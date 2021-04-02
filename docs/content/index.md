@@ -8,7 +8,7 @@ Please first have a look at the [`README.md`][github-file-readme] to setup and c
 
 This documentation provides you with advanced configuration, detailed examples, and hints.
 
-Preview deploy test. :tada:
+Preview deploy test. :tada: :tada:
 
 ## Getting Started
 
