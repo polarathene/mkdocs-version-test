@@ -24,10 +24,18 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          publish-dir: ./docs/site
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: Preview Deploy - ${{ github.event.pull_request.title }}
           alias: preview-for-pr-${{ github.event.pull_request.number }}
+          publish-dir: ./docs/site
+          # We supply our own PR comment after this step.
+          enable-pull-request-comment: false
+          # Disable adding deploy comment on merge commit.
+          enable-commit-comment: false
+          # Disable adding a "Netlify - Netlify deployment" check status.
+          enable-commit-status: false
+          # deploy-message: Preview Deploy - ${{ github.event.pull_request.title }}
+          # production-deploy: false
+          # netlify-config-path: ./docs/netlify.toml
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
