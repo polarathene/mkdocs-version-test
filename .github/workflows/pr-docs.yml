@@ -35,5 +35,5 @@ jobs:
           message: |
             [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
 
-            Built with commit ${{ github.sha }}
+            Built with commit ${{ github.sha }} or is it ${{ github.event.pull_request.head.sha }}
 
