@@ -16,7 +16,7 @@
         <link rel="canonical" href="https://polarathene.github.io/mkdocs-version-test/edge/contributing/coding-style/">
       
       <link rel="icon" href="../../assets/logo/favicon-32x32.png">
-      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.0.6">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.0">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.2c0c5eaf.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.33e2939f.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.7fa14f5b.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ef6f36e2.min.css">
         
       
     
@@ -57,8 +57,9 @@
     
     
     <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
-      
   
+    
+    <script>function __prefix(e){return new URL("../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -101,9 +102,8 @@
         </div>
       </div>
     </div>
-    <div class="md-header__options">
-      
-    </div>
+    
+    
     
       <label class="md-header__button md-icon" for="__search">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
@@ -119,7 +119,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
       </label>
       <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
       </button>
     </form>
     <div class="md-search__output">
@@ -230,7 +230,7 @@
 
 
   <li class="md-tabs__item">
-    <a href="../../faq/faq/" class="md-tabs__link">
+    <a href="../../faq/" class="md-tabs__link">
       FAQ
     </a>
   </li>
@@ -1013,7 +1013,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../faq/faq/" class="md-nav__link">
+      <a href="../../faq/" class="md-nav__link">
         FAQ
       </a>
     </li>
@@ -1336,7 +1336,7 @@
                 
                   <h1>Coding Style</h1>
                 
-                <h2 id="bash-and-shell">Bash and Shell<a class="headerlink" href="#bash-and-shell" title="Permanent link">⚓︎</a></h2>
+                <h2 id="bash-and-shell"><a class="toclink" href="#bash-and-shell">Bash and Shell</a></h2>
 <p>When refactoring, writing or altering scripts, that is Shell and bash scripts, in any way, adhere to these rules:</p>
 <ol>
 <li><strong>Adjust your style of coding to the style that is already present</strong>! Even if you do not like it, this is due to consistency. There was a lot of work involved in making all scripts consistent.</li>
@@ -1346,8 +1346,8 @@
 <li><code>setup.sh</code> provides a good starting point to look for.</li>
 <li>When appropriate, use the <code>set</code> builtin. We recommend <code>set -euEo pipefail</code> or <code>set -uE</code>.</li>
 </ol>
-<h2 id="styling-rules">Styling rules<a class="headerlink" href="#styling-rules" title="Permanent link">⚓︎</a></h2>
-<h3 id="if-else-statements">If-Else-Statements<a class="headerlink" href="#if-else-statements" title="Permanent link">⚓︎</a></h3>
+<h2 id="styling-rules"><a class="toclink" href="#styling-rules">Styling rules</a></h2>
+<h3 id="if-else-statements"><a class="toclink" href="#if-else-statements">If-Else-Statements</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># when using braces, use double braces</span>
 <span class="c1"># remember you do not need &quot;&quot; when using [[ ]]</span>
 <span class="k">if</span> <span class="o">[[</span> &lt;CONDITION1&gt; <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="o">[[</span> -f <span class="si">${</span><span class="nv">FILE</span><span class="si">}</span> <span class="o">]]</span>
@@ -1367,7 +1367,7 @@
   &lt;CODE TO RUN&gt;
 <span class="k">fi</span>
 </code></pre></div>
-<h3 id="variables-braces">Variables &amp; Braces<a class="headerlink" href="#variables-braces" title="Permanent link">⚓︎</a></h3>
+<h3 id="variables-braces"><a class="toclink" href="#variables-braces">Variables &amp; Braces</a></h3>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <p>Variables are always uppercase. We always use braces.</p>
@@ -1381,14 +1381,14 @@
 <span class="nv">var</span><span class="o">=</span><span class="s2">&quot;bad&quot;</span>
 <span class="nv">new</span><span class="o">=</span><span class="nv">$var</span>
 </code></pre></div>
-<h3 id="loops">Loops<a class="headerlink" href="#loops" title="Permanent link">⚓︎</a></h3>
+<h3 id="loops"><a class="toclink" href="#loops">Loops</a></h3>
 <p>Like <code>if-else</code>, loops look like this</p>
 <div class="highlight"><pre><span></span><code><span class="k">for</span> / <span class="k">while</span> &lt;LOOP CONDITION&gt;
 <span class="k">do</span>
   &lt;CODE TO RUN&gt;
 <span class="k">done</span>
 </code></pre></div>
-<h3 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link">⚓︎</a></h3>
+<h3 id="functions"><a class="toclink" href="#functions">Functions</a></h3>
 <p>It's always nice to see the use of functions as it also provides a clear structure. If scripts are small, this is unnecessary, but if they become larger, please consider using functions. When doing so, provide <code>function _main</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="k">function</span> _&lt;name_underscored_and_lowercase&gt;
 <span class="o">{</span>
@@ -1398,7 +1398,7 @@
   <span class="nb">local</span> &lt;LOCAL_VARIABLE_NAME&gt;
 <span class="o">}</span>
 </code></pre></div>
-<h3 id="error-tracing">Error Tracing<a class="headerlink" href="#error-tracing" title="Permanent link">⚓︎</a></h3>
+<h3 id="error-tracing"><a class="toclink" href="#error-tracing">Error Tracing</a></h3>
 <p>A construct to trace error in your scripts looks like this. Remember: Remove <code>set -x</code> in the end. This is for debugging purposes only.</p>
 <div class="highlight"><pre><span></span><code><span class="nb">set</span> -xeuEo pipefail
 <span class="nb">trap</span> <span class="s1">&#39;__log_err ${FUNCNAME[0]:-&quot;?&quot;} ${BASH_COMMAND:-&quot;?&quot;} ${LINENO:-&quot;?&quot;} ${?:-&quot;?&quot;}&#39;</span> ERR
@@ -1416,7 +1416,7 @@
   &lt;CODE TO RUN AFTERWARDS&gt;
 <span class="o">}</span>
 </code></pre></div>
-<h3 id="comments-descriptiveness-an-example">Comments, Descriptiveness &amp; An Example<a class="headerlink" href="#comments-descriptiveness-an-example" title="Permanent link">⚓︎</a></h3>
+<h3 id="comments-descriptiveness-an-example"><a class="toclink" href="#comments-descriptiveness-an-example">Comments, Descriptiveness &amp; An Example</a></h3>
 <p>Comments should only describe non-obvious matters. Comments should start lowercase when they aren't sentences. Make the code <strong>self-descriptive</strong> by using meaningful names! Make comments not longer than approximately 80 columns, then wrap the line.</p>
 <p>A positive example, which is taken from <code>start-mailserver.sh</code>, would be</p>
 <div class="highlight"><pre><span></span><code><span class="k">function</span> _setup_postfix_aliases
@@ -1454,7 +1454,7 @@
   ...
 <span class="o">}</span>
 </code></pre></div>
-<h2 id="yaml">YAML<a class="headerlink" href="#yaml" title="Permanent link">⚓︎</a></h2>
+<h2 id="yaml"><a class="toclink" href="#yaml">YAML</a></h2>
 <p>When formatting YAML files, use <a href="https://prettier.io">Prettier</a>, an opinionated formatter. There are many plugins for IDEs around.</p>
                 
                   
@@ -1468,6 +1468,7 @@
             </article>
           </div>
         </div>
+        
       </main>
       
         
@@ -1529,10 +1530,10 @@
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fb4a9340.min.js", "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.expand", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../../assets/javascripts/workers/search.fe42c31b.min.js", "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.a1c7c35e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d892486b.min.js"></script>
       
     
   </body>
