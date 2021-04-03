@@ -19,7 +19,7 @@ docs_dir: 'content/'
 # Canonical URL (HTML content instructs search engines that this is where the preferred version of the docs is located, useful when we have duplicate content like versioned docs)
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Choosing_between_www_and_non-www_URLs#using_%3Clink_relcanonical%3E
 # Also required for `sitemap.xml` generation at build time; which bots use to assist them crawling and indexing a website,
-site_url: 'https://polarathene.github.io/mkdocs-version-test/edge'
+site_url: 'https://polarathene.github.io/mkdocs-version-test/edge/'
 
 # Anything related to the `mkdocs-material` theme config goes here:
 theme:

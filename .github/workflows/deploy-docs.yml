@@ -40,8 +40,7 @@ jobs:
 
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
-        # --user is required for build output file ownership to match the CI user instead of the containers internal user
-        run: docker run --rm --user "$(id -u):$(id -g)" -v "${PWD}:/docs" squidfunk/mkdocs-material build --strict
+        run: '../.github/workflows/scripts/docs/build-docs.sh'
 
       - name: 'If a tagged version, fix canonical links and remove `404.html`'
         if: startsWith(github.ref, 'refs/tags/')
