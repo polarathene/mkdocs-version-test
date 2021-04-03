@@ -19,7 +19,7 @@ jobs:
         working-directory: docs
         run: |
           # Adjust mkdocs.yml for preview build
-          sed -i "s|^site_url:.*|site_url: 'https://${PREVIEW_PREFIX}--${SITE_NAME}.netlify.app'|" mkdocs.yml
+          sed -i "s|^site_url:.*|site_url: 'https://${PREVIEW_PREFIX}--${SITE_NAME}.netlify.app/'|" mkdocs.yml
 
           # `--user` is required for build output file ownership to match the CI user instead of the containers internal user
           docker run --rm --user "$(id -u):$(id -g)" -v "${PWD}:/docs" squidfunk/mkdocs-material build --strict
