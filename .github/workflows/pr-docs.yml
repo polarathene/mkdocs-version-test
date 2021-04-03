@@ -6,17 +6,31 @@ on:
       - 'docs/**'
 
 jobs:
-  build:
-    name: 'Verify Build'
+  preview:
+    name: 'Deploy Preview'
     runs-on: ubuntu-20.04
+    env:
+      PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
+      SITE_NAME: thirsty-shannon-0b904a
     steps:
       - uses: actions/checkout@v2
 
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
-        run: docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material build --strict
+        run: |
+          # Adjust mkdocs.yml for preview build
+          sed -i "s|^site_url:.*|site_url: 'https://${PREVIEW_PREFIX}--${SITE_NAME}.netlify.app'|" mkdocs.yml
 
-      - name: Deploy Preview (Netlify)
+          # `--user` is required for build output file ownership to match the CI user instead of the containers internal user
+          docker run --rm --user "$(id -u):$(id -g)" -v "${PWD}:/docs" squidfunk/mkdocs-material build --strict
+
+          # Remove unnecessary build artifacts (https://github.com/squidfunk/mkdocs-material/issues/2519)
+          cd site
+          find . -type f -name '*.min.js.map' -delete -o -name '*.min.css.map' -delete
+          rm sitemap.xml.gz
+          rm -r assets/javascripts/lunr
+
+      - name: 'Send preview build to Netlify'
         id: preview
         uses: nwtgck/actions-netlify@v1.1
         timeout-minutes: 1
@@ -25,16 +39,15 @@ jobs:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          alias: deploy-preview-${{ github.event.pull_request.number }}
-          deploy-message: PR#${{ github.event.pull_request.number }}@${{ github.event.pull_request.head.sha }} | ${{ github.event.pull_request.title }}
+          alias: ${{ env.PREVIEW_PREFIX }}
+          deploy-message: ${{ github.event.pull_request.title }}(PR#${{ github.event.pull_request.number }}@${{ github.event.pull_request.head.sha }})
           publish-dir: ./docs/site
           # We supply our own PR comment after this step.
           enable-pull-request-comment: false
-          # Disable adding deploy comment on merge commit.
+          # Disable adding deploy comment on pre-merge commit.
           enable-commit-comment: false
           # Disable adding a "Netlify - Netlify deployment" check status.
-          # May be useful, can click the status symbol for past commits to view old previews?
-          # enable-commit-status: false
+          enable-commit-status: false
           # production-deploy: false
           # netlify-config-path: ./docs/netlify.toml
 
