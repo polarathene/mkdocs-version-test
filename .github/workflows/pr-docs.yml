@@ -27,9 +27,6 @@ jobs:
         id: preview
         uses: nwtgck/actions-netlify@v1.2
         timeout-minutes: 1
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           github-deployment-environment: netlify
