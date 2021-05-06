@@ -9,6 +9,7 @@ jobs:
   preview:
     name: 'Deploy Preview'
     runs-on: ubuntu-20.04
+    environment: netlify
     env:
       PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
       SITE_NAME: wonderful-liskov-8de2b1
@@ -25,13 +26,16 @@ jobs:
 
       - name: 'Send preview build to Netlify'
         id: preview
-        uses: nwtgck/actions-netlify@v1.1
+        uses: nwtgck/actions-netlify@v1.2
         timeout-minutes: 1
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-deployment-environment: netlify
+          github-deployment-description: nwtgck-test
+          fails-without-credentials: true
           alias: ${{ env.PREVIEW_PREFIX }}
           deploy-message: ${{ github.event.pull_request.title }}(PR#${{ github.event.pull_request.number }}@${{ github.event.pull_request.head.sha }})
           publish-dir: ./docs/site
