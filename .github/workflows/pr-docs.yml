@@ -43,7 +43,7 @@ jobs:
           github-deployment-description: nwtgck-test
           fails-without-credentials: true
           alias: ${{ env.PREVIEW_PREFIX }}
-          deploy-message: ${{ github.event.pull_request.title }}(PR#${{ github.event.pull_request.number }}@${{ github.event.pull_request.head.sha }})
+          deploy-message: "${{ github.event.pull_request.title }} (PR#${{ github.event.pull_request.number }} @ commit: ${{ github.event.pull_request.head.sha }})"
           publish-dir: ./docs/site
           # We supply our own PR comment after this step.
           enable-pull-request-comment: false
