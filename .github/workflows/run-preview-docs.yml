@@ -1,0 +1,72 @@
+name: 'Documentation Preview'
+
+on:
+  workflow_run:
+    workflows: ["Docs - Preview Build"]
+    types:
+      - completed
+
+jobs:
+  preview:
+    name: 'Deploy Preview'
+    runs-on: ubuntu-20.04
+    if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
+    # Desirable for isolating secrets or ENV from those unrelated to the workflow
+    # Presently causes implicit opt-in to deployment environment status/log
+    # This is redundant as the action performs the logic but as the `github-actions[bot]` user (preferable)
+    # https://github.com/nwtgck/actions-netlify/issues/538
+    # environment:
+    #   name: netlify
+    #   url: ${{ steps.preview.outputs.deploy-url }}
+    # env:
+    #   PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
+    steps:
+
+      - name: 'Download build artifact'
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          run_id: ${{ github.event.workflow_run.id }}
+          workflow: pr-docs.yml
+          name: preview-build
+
+      - name: 'Extract build artifact'
+        run: tar -xf artifact.tar.zst
+
+      - name: 'Restore preserved ENV'
+        run: cat pr.env >> "${GITHUB_ENV}"
+          # echo "PR_NUMBER=$(cat number)"     >> "${GITHUB_ENV}"
+          # echo "PR_TITLE=$(cat title)"       >> "${GITHUB_ENV}"
+
+      - name: 'Send preview build to Netlify'
+        id: preview
+        uses: nwtgck/actions-netlify@v1.2
+        timeout-minutes: 1
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-deployment-environment: netlifyx
+          github-deployment-description: nwtgck-test
+          fails-without-credentials: true
+          alias: ${{ env.PREVIEW_PREFIX }}
+          deploy-message: "${{ env.PR_TITLE }} (PR#${{ env.PR_NUMBER }} @ commit: ${{ env.PR_HEADSHA }})"
+          publish-dir: ${{ env.BUILD_DIR }}
+          # We supply our own PR comment after this step.
+          enable-pull-request-comment: false
+          # Disable adding deploy comment on pre-merge commit.
+          enable-commit-comment: false
+          # Disable adding a "Netlify - Netlify deployment" check status.
+          enable-commit-status: false
+          # production-deploy: false
+          # netlify-config-path: ./docs/netlify.toml
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: preview
+          message: |
+            [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
+
+            Built with commit: ${{ env.PR_HEADSHA }}
+

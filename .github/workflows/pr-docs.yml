@@ -1,4 +1,4 @@
-name: 'Documentation'
+name: 'Docs - Preview Build'
 
 on:
   pull_request:
@@ -6,18 +6,12 @@ on:
       - 'docs/**'
 
 jobs:
-  preview:
-    name: 'Deploy Preview'
+  build-preview:
+    name: 'Build Preview'
     runs-on: ubuntu-20.04
-    # Desirable for isolating secrets or ENV from those unrelated to the workflow
-    # Presently causes implicit opt-in to deployment environment status/log
-    # This is redundant as the action performs the logic but as the `github-actions[bot]` user (preferable)
-    # https://github.com/nwtgck/actions-netlify/issues/538
-    # environment:
-    #   name: netlify
-    #   url: ${{ steps.preview.outputs.deploy-url }}
     env:
-      PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
+      BUILD_DIR: docs/site
+      PREVIEW_PREFIX: pullrequest-${{ github.event.pull_request.number }}
       SITE_NAME: wonderful-liskov-8de2b1
     steps:
       - uses: actions/checkout@v2
@@ -30,35 +24,29 @@ jobs:
 
           ../.github/workflows/scripts/docs/build-docs.sh
 
-      - name: 'Send preview build to Netlify'
-        id: preview
-        uses: nwtgck/actions-netlify@v1.2
-        timeout-minutes: 1
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-deployment-environment: netlifyx
-          github-deployment-description: nwtgck-test
-          fails-without-credentials: true
-          alias: ${{ env.PREVIEW_PREFIX }}
-          deploy-message: "${{ github.event.pull_request.title }} (PR#${{ github.event.pull_request.number }} @ commit: ${{ github.event.pull_request.head.sha }})"
-          publish-dir: ./docs/site
-          # We supply our own PR comment after this step.
-          enable-pull-request-comment: false
-          # Disable adding deploy comment on pre-merge commit.
-          enable-commit-comment: false
-          # Disable adding a "Netlify - Netlify deployment" check status.
-          enable-commit-status: false
-          # production-deploy: false
-          # netlify-config-path: ./docs/netlify.toml
+      # Bundles build dir and env file into a zstd archive, paths will be preserved.
+      - name: 'Prepare artifact for transfer'
+        run: |
+          # Save ENV for transfer
+          echo "PR_HEADSHA=${{ github.event.pull_request.head.sha }}" >> pr.env
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}"    >> pr.env
+          echo "PR_TITLE=${{ github.event.pull_request.title }}"      >> pr.env
+          echo "PREVIEW_PREFIX=${{ env.PREVIEW_PREFIX }}"             >> pr.env
+          echo "BUILD_DIR=${{ env.BUILD_DIR }}"                       >> pr.env
 
-      - uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          header: preview
-          message: |
-            [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
+          tar --zstd -cf artifact.tar.zst pr.env ${{ env.BUILD_DIR }}
 
-            Built with commit ${{ github.event.pull_request.head.sha }}
+      # Minimize risk of failure by reducing web requests (tar bundle) and bandwidth used (compression)
+      # Bundle all files into a single archive (tar) - single upload request.
+      # Compress archive with zstd, default level 3 (fast) - output is ~10% of archive size.
+      # - name:
+      #   run: |
+      #     mv "${BUILD_DIR}" "/tmp/artifact/site"
+
+      - name: 'Upload artifact for workflow transfer'
+        uses: actions/upload-artifact@v2
+        with:
+          name: preview-build
+          path: artifact.tar.zst
+          retention-days: 1
 
