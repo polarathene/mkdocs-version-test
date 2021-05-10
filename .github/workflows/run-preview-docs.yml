@@ -65,6 +65,7 @@ jobs:
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           header: preview
+          number: ${{ env.PR_NUMBER }}
           message: |
             [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
 
