@@ -54,11 +54,11 @@ jobs:
           deploy-message: "${{ env.PR_TITLE }} (PR#${{ env.PR_NUMBER }} @ commit: ${{ env.PR_HEADSHA }})"
           publish-dir: ${{ env.BUILD_DIR }}
           # We supply our own PR comment after this step.
-          enable-pull-request-comment: false
+          enable-pull-request-comment: true
           # Disable adding deploy comment on pre-merge commit.
-          enable-commit-comment: false
+          enable-commit-comment: true
           # Disable adding a "Netlify - Netlify deployment" check status.
-          enable-commit-status: false
+          enable-commit-status: true
           # production-deploy: false
           # netlify-config-path: ./docs/netlify.toml
 
