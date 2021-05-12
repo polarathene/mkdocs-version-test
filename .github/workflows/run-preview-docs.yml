@@ -8,7 +8,7 @@ on:
 
 jobs:
   preview:
-    name: 'preview'
+    name: 'Deploy Preview'
     runs-on: ubuntu-20.04
     if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
     # Desirable for isolating secrets or ENV from those unrelated to the workflow
@@ -21,7 +21,8 @@ jobs:
     # env:
     #   PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
     steps:
-      - uses: haya14busa/action-workflow_run-status@v1
+      # https://github.com/haya14busa/action-workflow_run-status/issues/158
+      # - uses: haya14busa/action-workflow_run-status@v1
 
       - name: 'Download build artifact'
         uses: dawidd6/action-download-artifact@v2
@@ -91,5 +92,5 @@ jobs:
           status: ${{ job.status }}
           sha: ${{ env.PR_HEADSHA }}
           context: Deploy Preview
-          description: This is a descriptionx
+          description: This is a description ${{ env.PR_HEADSHA }} ,, ${{ github.event.workflow_run.head_sha }}
 
