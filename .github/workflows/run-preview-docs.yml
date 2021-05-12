@@ -21,6 +21,16 @@ jobs:
     # env:
     #   PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
     steps:
+      - uses: haya14busa/action-workflow_run-status@v1
+
+      - name: Set commit status as pending
+        uses: myrotvorets/set-commit-action
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: pending
+          context: Deploy Preview
+          description: This is a description
+
       - name: 'Download build artifact'
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -71,4 +81,13 @@ jobs:
             [Documentation preview for this PR](${{ steps.preview.outputs.deploy-url }}) is ready! :tada:
 
             Built with commit: ${{ env.PR_HEADSHA }}
+
+      - name: Update commit status
+        uses: myrotvorets/set-commit-action
+        if: ${{ always() }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
+          context: Deploy Preview
+          description: This is a descriptionx
 

@@ -6,7 +6,7 @@ on:
       - 'docs/**'
 
 concurrency:
-  group: ${{ github.event.pull_request.number }}
+  group: deploy-preview-pull-request-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
