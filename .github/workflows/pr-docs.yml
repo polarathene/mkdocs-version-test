@@ -5,6 +5,10 @@ on:
     paths:
       - 'docs/**'
 
+concurrency:
+  group: ${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   build-preview:
     name: 'Build Preview'
