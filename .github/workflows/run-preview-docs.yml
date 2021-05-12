@@ -8,7 +8,7 @@ on:
 
 jobs:
   preview:
-    name: 'Deploy Preview'
+    name: 'preview'
     runs-on: ubuntu-20.04
     if: ${{ github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success' }}
     # Desirable for isolating secrets or ENV from those unrelated to the workflow
