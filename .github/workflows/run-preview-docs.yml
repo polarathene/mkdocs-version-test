@@ -22,6 +22,11 @@ jobs:
     #   PREVIEW_PREFIX: pullrequest-preview-${{ github.event.pull_request.number }}
     steps:
 
+      - name: 'output'
+        env:
+          BLAH: ${{ toJSON(github.event) }}
+        run: echo "${BLAH}"
+
       - name: 'Download build artifact'
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -53,12 +58,14 @@ jobs:
           alias: ${{ env.PREVIEW_PREFIX }}
           deploy-message: "${{ env.PR_TITLE }} (PR#${{ env.PR_NUMBER }} @ commit: ${{ env.PR_HEADSHA }})"
           publish-dir: ${{ env.BUILD_DIR }}
+          # Action needs PR context, no longer available:
+          # https://github.com/nwtgck/actions-netlify/issues/545
           # We supply our own PR comment after this step.
-          enable-pull-request-comment: true
+          enable-pull-request-comment: false
           # Disable adding deploy comment on pre-merge commit.
-          enable-commit-comment: true
+          enable-commit-comment: false
           # Disable adding a "Netlify - Netlify deployment" check status.
-          enable-commit-status: true
+          enable-commit-status: false
           # production-deploy: false
           # netlify-config-path: ./docs/netlify.toml
 

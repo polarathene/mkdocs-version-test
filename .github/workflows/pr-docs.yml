@@ -24,7 +24,9 @@ jobs:
 
           ../.github/workflows/scripts/docs/build-docs.sh
 
-      # Bundles build dir and env file into a zstd archive, paths will be preserved.
+      # Minimize risk of failure by reducing to single file upload (tar) and bandwidth used (zstd)
+      # Bundles build dir and env file into a zstd archive, nested file paths will be preserved.
+      # Compress archive with zstd, default level 3 (fast) - output is ~10% of archive size.
       - name: 'Prepare artifact for transfer'
         run: |
           # Save ENV for transfer
@@ -35,13 +37,6 @@ jobs:
           echo "BUILD_DIR=${{ env.BUILD_DIR }}"                       >> pr.env
 
           tar --zstd -cf artifact.tar.zst pr.env ${{ env.BUILD_DIR }}
-
-      # Minimize risk of failure by reducing web requests (tar bundle) and bandwidth used (compression)
-      # Bundle all files into a single archive (tar) - single upload request.
-      # Compress archive with zstd, default level 3 (fast) - output is ~10% of archive size.
-      # - name:
-      #   run: |
-      #     mv "${BUILD_DIR}" "/tmp/artifact/site"
 
       - name: 'Upload artifact for workflow transfer'
         uses: actions/upload-artifact@v2
