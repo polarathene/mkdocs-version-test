@@ -23,14 +23,6 @@ jobs:
     steps:
       - uses: haya14busa/action-workflow_run-status@v1
 
-      - name: Set commit status as pending
-        uses: myrotvorets/set-commit-action
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          status: pending
-          context: Deploy Preview
-          description: This is a description
-
       - name: 'Download build artifact'
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -46,6 +38,15 @@ jobs:
         run: cat pr.env >> "${GITHUB_ENV}"
           # echo "PR_NUMBER=$(cat number)"     >> "${GITHUB_ENV}"
           # echo "PR_TITLE=$(cat title)"       >> "${GITHUB_ENV}"
+
+      - name: Set commit status as pending
+        uses: myrotvorets/set-commit-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: pending
+          sha: ${{ env.PR_HEADSHA }}
+          context: Deploy Preview
+          description: This is a description
 
       - name: 'Send preview build to Netlify'
         id: preview
@@ -83,11 +84,12 @@ jobs:
             Built with commit: ${{ env.PR_HEADSHA }}
 
       - name: Update commit status
-        uses: myrotvorets/set-commit-action
+        uses: myrotvorets/set-commit-action@v1
         if: ${{ always() }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status }}
+          sha: ${{ env.PR_HEADSHA }}
           context: Deploy Preview
           description: This is a descriptionx
 
