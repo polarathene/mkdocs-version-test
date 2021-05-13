@@ -30,7 +30,7 @@ jobs:
           status: pending
           sha: ${{ github.event.workflow_run.head_sha }}
           context: 'Deploy Preview (pull_request => workflow_run)'
-          description: In progress..
+          # description: In progress..
 
       - name: 'Download build artifact'
         uses: dawidd6/action-download-artifact@v2
@@ -88,12 +88,12 @@ jobs:
         # Always run this step regardless of job failing early:
         if: ${{ always() }}
         env:
-          DEPLOY_SUCCESS: Preview successfully [deployed to Netlify](${{ steps.preview.outputs.deploy-url }}).
+          DEPLOY_SUCCESS: Preview successfully deployed.
           DEPLOY_FAILURE: Failed to deploy preview.
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           status: ${{ job.status == 'success' && 'success' || 'failure' }}
           sha: ${{ github.event.workflow_run.head_sha }}
           context: 'Deploy Preview (pull_request => workflow_run)'
-          description: ${{ job.status == 'success' && env.DEPLOY_SUCCESS || env.DEPLOY_FAILURE }}
+          # description: ${{ job.status == 'success' && env.DEPLOY_SUCCESS || env.DEPLOY_FAILURE }}
 
