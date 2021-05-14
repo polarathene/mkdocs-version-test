@@ -95,5 +95,5 @@ jobs:
           status: ${{ job.status == 'success' && 'success' || 'failure' }}
           sha: ${{ github.event.workflow_run.head_sha }}
           context: 'Deploy Preview (pull_request => workflow_run)'
-          # description: ${{ job.status == 'success' && env.DEPLOY_SUCCESS || env.DEPLOY_FAILURE }}
+          description: ${{ job.status == 'success' && env.DEPLOY_SUCCESS || env.DEPLOY_FAILURE }}
 
