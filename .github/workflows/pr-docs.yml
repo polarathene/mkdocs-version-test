@@ -1,43 +1,53 @@
-name: 'Docs - Preview Build'
+name: 'Documentation (PR)'
 
 on:
   pull_request:
     paths:
       - 'docs/**'
 
+# If the workflow for a PR is triggered multiple times, previous existing runs will be canceled.
+# eg: Applying multiple suggestions from a review directly via the Github UI.
+# Instances of the 2nd phase of this workflow (via `workflow_run`) presently lack concurrency limits due to added complexity.
 concurrency:
-  group: deploy-preview-pull-request-${{ github.event.pull_request.number }}
+  group: deploypreview-pullrequest-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+# `pull_request` workflow is unreliable alone: Non-collaborator contributions lack access to secrets for security reasons.
+# A separate workflow (docs-preview-deploy.yml) handles the deploy after the potentially untrusted code is first run in this workflow.
+# See: https://securitylab.github.com/research/github-actions-preventing-pwn-requests/
 jobs:
-  build-preview:
+  prepare-preview:
     name: 'Build Preview'
     runs-on: ubuntu-20.04
     env:
       BUILD_DIR: docs/site
-      PREVIEW_PREFIX: pullrequest-${{ github.event.pull_request.number }}
-      SITE_NAME: wonderful-liskov-8de2b1
+      NETLIFY_SITE_PREFIX: pullrequest-${{ github.event.pull_request.number }}
+      NETLIFY_SITE_NAME: wonderful-liskov-8de2b1
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2.3.4
 
       - name: 'Build with mkdocs-material via Docker'
         working-directory: docs
+        env:
+          PREVIEW_URL: 'https://${NETLIFY_SITE_PREFIX}--${NETLIFY_SITE_NAME}.netlify.app/'
         run: |
           # Adjust mkdocs.yml for preview build
-          sed -i "s|^site_url:.*|site_url: 'https://${PREVIEW_PREFIX}--${SITE_NAME}.netlify.app/'|" mkdocs.yml
+          sed -i "s|^site_url:.*|site_url: '${PREVIEW_URL}'|" mkdocs.yml
+
 
           ../.github/workflows/scripts/docs/build-docs.sh
+      # Volley over to secure workflow #
+      # ============================== #
 
-      # Minimize risk of failure by reducing to single file upload (tar) and bandwidth used (zstd)
-      # Bundles build dir and env file into a zstd archive, nested file paths will be preserved.
-      # Compress archive with zstd, default level 3 (fast) - output is ~10% of archive size.
+      # Minimize risk of upload failure by bundling files to a single compressed archive (tar + zstd).
+      # Bundles build dir and env file into a compressed archive, nested file paths will be preserved.
       - name: 'Prepare artifact for transfer'
         run: |
           # Save ENV for transfer
           echo "PR_HEADSHA=${{ github.event.pull_request.head.sha }}" >> pr.env
           echo "PR_NUMBER=${{ github.event.pull_request.number }}"    >> pr.env
           echo "PR_TITLE=${{ github.event.pull_request.title }}"      >> pr.env
-          echo "PREVIEW_PREFIX=${{ env.PREVIEW_PREFIX }}"             >> pr.env
+          echo "NETLIFY_SITE_PREFIX=${{ env.NETLIFY_SITE_PREFIX }}"   >> pr.env
           echo "BUILD_DIR=${{ env.BUILD_DIR }}"                       >> pr.env
 
           tar --zstd -cf artifact.tar.zst pr.env ${{ env.BUILD_DIR }}
