@@ -34,8 +34,9 @@ jobs:
           # Adjust mkdocs.yml for preview build
           sed -i "s|^site_url:.*|site_url: '${PREVIEW_URL}'|" mkdocs.yml
 
+          docker run --rm -v ${PWD}:/docs squidfunk/mkdocs-material:7.1.4 build --strict
 
-          ../.github/workflows/scripts/docs/build-docs.sh
+      # ============================== #
       # Volley over to secure workflow #
       # ============================== #
 
