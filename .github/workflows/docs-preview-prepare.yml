@@ -30,12 +30,14 @@ jobs:
         working-directory: docs
         env:
           PREVIEW_URL: 'https://${NETLIFY_SITE_PREFIX}--${NETLIFY_SITE_NAME}.netlify.app/'
+          NETLIFY_BRANDING: '<img alt="Deploys by Netlify" src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" style="float: right;">'
         run: |
           # Adjust mkdocs.yml for preview build
           sed -i "s|^site_url:.*|site_url: '${PREVIEW_URL}'|" mkdocs.yml
 
           # Add preview hosting service mention to main page (Provider OSS plan requirement):
-          echo '![Deploys by Netlify](https://www.netlify.com/img/global/badges/netlify-color-accent.svg)' >> content/index.md
+          sed -i "s|^copyright: '|copyright: '${NETLIFY_BRANDING}|" mkdocs.yml
+          echo '.md-footer-copyright { width: 100%; }' >> content/assets/css/customizations.css
 
           ../.github/workflows/scripts/docs/build-docs.sh
 
