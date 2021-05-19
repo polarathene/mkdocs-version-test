@@ -34,6 +34,9 @@ jobs:
           # Adjust mkdocs.yml for preview build
           sed -i "s|^site_url:.*|site_url: '${PREVIEW_URL}'|" mkdocs.yml
 
+          # Add preview hosting service mention to main page (Provider OSS plan requirement):
+          echo '[Deploys by Netlify](https://www.netlify.com/img/global/badges/netlify-color-accent.svg)' >> content/index.md
+
           ../.github/workflows/scripts/docs/build-docs.sh
 
       # ============================== #
